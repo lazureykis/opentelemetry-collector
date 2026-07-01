@@ -5,6 +5,7 @@ package consumererror
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"testing"
 
@@ -281,6 +282,14 @@ func TestError_ToGRPCStatus(t *testing.T) {
 			require.Equal(t, tt.want, s)
 		})
 	}
+}
+
+func TestToGRPCStatus_PlainError(t *testing.T) {
+	plainErr := errors.New("plain")
+	require.Equal(t, status.New(codes.Unknown, "plain"), ToGRPCStatus(plainErr))
+
+	wrappedErr := fmt.Errorf("wrapped: %w", plainErr)
+	require.Equal(t, status.New(codes.Unknown, "wrapped: plain"), ToGRPCStatus(wrappedErr))
 }
 
 func TestStatus_ToGRPCStatus(t *testing.T) {

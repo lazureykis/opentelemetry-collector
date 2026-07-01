@@ -154,7 +154,7 @@ func ToHTTPStatus(err error) int {
 // If an [Error] object is not present, then we attempt to get a status.Status from the
 // error tree.
 //
-// If a status.Status cannot be derived from these sources then INTERNAL is
+// If a status.Status cannot be derived from these sources then UNKNOWN is
 // returned.
 func ToGRPCStatus(err error) *status.Status {
 	var e *Error
@@ -172,5 +172,5 @@ func ToGRPCStatus(err error) *status.Status {
 	if st, ok := status.FromError(err); ok {
 		return st
 	}
-	return status.New(codes.Unknown, e.Error())
+	return status.New(codes.Unknown, err.Error())
 }
